@@ -82,10 +82,10 @@ Background Threat Analyzer : The Background Threat Analyzer runs as a worker ser
 * (Linux) minikube and kubectl
 
 # Deployment with Kubernetets
-Step 1: Clone the repo using "git clone https://github.com/Zeeshan8145/Automotive-Attack-Management-System" and cd into it
-Step 2: After making sure kubectl and Kubernetes is enable, run "kubectl apply -f Kubernetes/deployment.yaml"
-Step 3: Please note that it might take some time for configurations to take effect and pods to be up and running (espcially database). Check the status using "kubectl get pods" and "kubectl get services"
-Step 4: Once everything is running , the system should be accessible through "http://localhost:8000" 
+* Step 1: Clone the repo using "git clone https://github.com/Zeeshan8145/Automotive-Attack-Management-System" and cd into it
+* Step 2: After making sure kubectl and Kubernetes is enable, run "kubectl apply -f Kubernetes/deployment.yaml"
+* Step 3: Please note that it might take some time for configurations to take effect and pods to be up and running (espcially database). Check the status using "kubectl get pods" and "kubectl get services"
+* Step 4: Once everything is running , the system should be accessible through "http://localhost:8000" 
 
 And VOILA with that the system should work, I know  it is not pretty today :(  , will work on it...hopefully
 Note: This is the happy path, caveats and foreseen issue explained below.
