@@ -2,7 +2,7 @@
 This project is a containerized , Kubernetes deployable system made up of a bunch of microservices to create a attack database and aid in searching known automotive cyberattacks, retreiving CVE informtaion, and processing approved vulnerabilities into automotive attack records. 
 
 ## SYSTEM PREVIEW
-(docs/Simplifiedoverview.png)
+![Automotive Attack Management System - Overview](docs/Simplifiedoverview.png)
 
 The system provided a web interface for searching and creating a internal known automotive attack datasbe and looking up relevant CVE , refining them and adding it to the interal attack database. 
 The main objectives are to:
