@@ -35,27 +35,42 @@ For detailed information on endpoints, Dockerfiles of each components and its de
 
 4.Attack addition: The Background Threat Analyzer processes queued jobs, applies the configured threat scoring rules, and creates an attack record. 
 
-API Endpoints
-Threat Frontend
-Method	Endpoint	Description
-GET	/	Displays the dashboard.
-GET	/search	Searches for known attacks and supports fallback to CVE lookup.
-GET	/search-cves	Searches for Common Vulnerabilities and Exposures (CVE) information.
-POST	/approve-cve	Submits an approved CVE for processing.
-GET	/health	Checks frontend service health.
+## API Endpoints
 
-Internal Attack Lookup
-Method	Endpoint	Description
-GET	/health	Checks service and database health.
-GET	/stats	Returns attack-related statistics.
-GET	/attacks	Retrieves attack records.
-POST	/attacks/from-cve	Submits a job to generate an attack record from a CVE.
-GET	/jobs/{job_id}	Retrieves the status of a background job using its job ID.
-GET	/attacks/search	Searches known automotive attacks.
+### 1. Frontend Service
 
-CVE Lookup
-Method	Endpoint	Description
-GET	/cve/search	Searhhe the NVD API for vulnerabilities based on query
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/` | Displays the main dashboard |
+| GET | `/search` | Searches for automotive attacks |
+| GET | `/search-cves` | Searches for CVEs |
+| POST | `/approve-cve` | Approves a CVE for attack creation |
+| GET | `/health` | Checks frontend health |
+
+### 2. Internal Attack Lookup Service
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/health` | Checks service health and database connectivity |
+| GET | `/stats` | Returns attack statistics |
+| GET | `/attacks` | Retrieves stored attacks |
+| POST | `/attacks/from-cve` | Submits a job to create an attack from a CVE |
+| GET | `/jobs/{job_id}` | Retrieves the status of a background job |
+| GET | `/attacks/search` | Searches existing automotive attacks |
+
+### 3. CVE Lookup Service
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/health` | Checks service health |
+| GET | `/search` | Searches for CVEs using the NVD API and cached data |
+
+
+
+### 5. MongoDB
+
+MongoDB stores automotive attack records, cached CVE data, pending lookups, and background job information. It is accessed internally by the application services and is not intended to be exposed publicly.
+
 
 Background Threat Analyzer : The Background Threat Analyzer runs as a worker service. It processes queued jobs and creates attack records. It does not need to expose a browser facing port. Though it couled be useful to have status check end point for users to check the status of a worker from the browser , improvement point for v2.0 :)
 
@@ -67,7 +82,7 @@ Background Threat Analyzer : The Background Threat Analyzer runs as a worker ser
 * (Linux) minikube and kubectl
 
 # Deployment with Kubernetets
-Step 1: Clone the repo using "git clone XXXXXX" and cd into it
+Step 1: Clone the repo using "git clone https://github.com/Zeeshan8145/Automotive-Attack-Management-System" and cd into it
 Step 2: After making sure kubectl and Kubernetes is enable, run "kubectl apply -f Kubernetes/deployment.yaml"
 Step 3: Please note that it might take some time for configurations to take effect and pods to be up and running (espcially database). Check the status using "kubectl get pods" and "kubectl get services"
 Step 4: Once everything is running , the system should be accessible through "http://localhost:8000" 
