@@ -24,7 +24,7 @@ The main objectives are to:
 
 Note: Each component has a separate resoponsibility and exposes relevant REST API endpoints. They can be scaled separately. The Database uses a PersistentVolumeClaim to retain information beyond any restarts. 
 Technologies used: Python and FastAPI, Docker, Docker Hub, Kubernetes, MongoDB 8
-For detailed information on endpoints, Dockerfiles of each components and its dependicies please refer to - 
+For detailed information on endpoints, Dockerfiles of each components and its dependicies please refer to - https://github.com/Zeeshan8145/Automotive-Attack-Management-System/blob/main/docs/Build%20Something%20Assignment%20-%20%20Mohammed%20Zeeshan%20Praveen%20Meera.pdf 
 
 ## Workflows and Endpoints ##
 1. Search for known attacks: The user submits a search through the dashboard. The frontend sends the request to the Internal Attack Lookup service, which searches existing attack records in the database.
@@ -105,7 +105,7 @@ Note: This is the happy path, caveats and foreseen issue explained below.
 
 # Some Features and Limitations
 
-* Scaling : The application services are deployed independently, so their replica counts can be adjusted. For example  scale the <service> to two replicas by running "kubectl scale deployment <service> --replicas=2" and you should get two instance of the pod when running "kubectl get pods". Note that the database is deployed as a single StatefulSet replica in this implementation. It is not configured as a replicated database cluster.
+* Scaling : The application services are deployed independently, so their replica counts can be adjusted. For example  scale the <service> to two replicas by running "kubectl scale deployment/background-threatanalyzer --replicas=3" and you should get three instances of the pod when running "kubectl get pods". Note that the database is deployed as a single StatefulSet replica in this implementation. It is not configured as a replicated database cluster.
 
 *MongoDB is deployed separately from the application services using a StatefulSet and a PersistentVolumeClaim.
 
