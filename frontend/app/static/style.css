@@ -1,0 +1,57 @@
+
+body {
+    font-family: Arial, sans-serif;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 24px;
+    background: #00060c;
+    color: #202833;
+}
+
+header, main section {
+    background: rgb(4, 200, 239);
+    padding: 24px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+.summary {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.summary article {
+    flex: 1;
+    min-width: 150px;
+    padding: 16px;
+    background: #8506a403;
+    border-radius: 6px;
+}
+
+.summary article p {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+input {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    margin: 8px 0 16px;
+}
+
+button {
+    padding: 10px 18px;
+    cursor: pointer;
+    background-color: #007bff;   /* Sets the button background colour to blue. */
+    color: #ffffff;               /* Sets the button text colour to white. */
+    border: none;                 /* Removes the default button border. */
+    border-radius: 6px;  
+}
+
+.note {
+    color: #00060e;
+    font-size: 14px;
+}

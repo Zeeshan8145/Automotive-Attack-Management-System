@@ -1,0 +1,261 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <h1>{{ title }}</h1>
+        <p>Find known automotive attacks and CVE vulnerabilities.</p>
+    </header>
+
+    <main>
+        <section class="summary">
+            <article>
+                <h2>Known Attacks</h2>
+                <p>{{ known_attacks }}</p>
+            </article>
+
+            <article>
+                <h2>Cached CVEs</h2>
+                <p>{{ cached_cves }}</p>
+            </article>
+
+            <article>
+                <h2>Pending Lookups</h2>
+                <p>{{ pending_lookups }}</p>
+            </article>
+        </section>
+
+        <section>
+            <h2>Search Vulnerabilities</h2>
+
+            <form action="/search" method="get">
+                <label for="query">Attack keyword or internal Attack ID</label>
+
+                <input
+                    id="query"
+                    name="query"
+                    type="text"
+                    value="{{ query | default('', true) }}"
+                    placeholder="Example: AUTO-ATTACK-001 or CAN bus"
+                    required
+                >
+
+                <button type="submit">Search</button>
+            </form>
+            
+            <form action="/search-cves" method="get">
+                <label for="query">Search the external CVE database independently</label>
+
+                <input
+                    id="cve_query"
+                    name="query"
+                    type="text"
+                    value="{{ query | default('', true) }}"
+                    placeholder="Example: CAN bus or CVE-2016-9337"
+                    required
+                >
+
+                <button type="submit">Search</button>
+            </form>
+        </section>
+
+        {% if error %}
+        <section>
+            <h2>Search Error</h2>
+            <p role="alert">{{ error }}</p>
+        </section>
+        {% endif %}
+
+        {% if approval_message %}
+        <section>
+            <h2>Approval Successful</h2>
+            <p role="status">{{ approval_message }}</p>
+        </section>
+        {% endif %}
+
+        {% if query %}
+        <section>
+            <h2>Search Results</h2>
+
+            {% if results %}
+                {% if result_type == "attacks" %}
+                    <p>
+                        Found {{ results | length }}
+                        internal attack record(s).
+                    </p>
+
+                    {% for attack in results %}
+                    <article>
+                        <h3>{{ attack.title }}</h3>
+
+                        <p>
+                            <strong>Internal Attack ID:</strong>
+                            {{ attack.attack_id }}
+                        </p>
+
+                        <p>
+                            <strong>Description:</strong>
+                            {{ attack.description }}
+                        </p>
+                        <p>
+                            <strong>Applicable ECU</strong>
+                            {% if attack.applicable_ecu %}
+                               {{ attack.applicable_ecu | join(", ") }}
+                            {% else %}
+                               Not specified
+                            {% endif %}
+                        </p>
+                        <p>
+                            <strong>Threat Score:</strong>
+                            {% if attack.threat_score is defined and attack.threat_score is not none %}
+                               {{ attack.threat_score }}/10
+                            {% else %}
+                               Not calculated
+                            {% endif %}
+                        </p>
+
+
+                        {% if attack.cve_id %}
+                        <p>
+                            <strong>Linked CVE:</strong>
+                            {{ attack.cve_id }}
+                        </p>
+                        {% endif %}
+
+                        {% if attack.keywords %}
+                        <p>
+                            <strong>Keywords:</strong>
+                            {{ attack.keywords | join(', ') }}
+                        </p>
+                        {% endif %}
+                    </article>
+                    {% endfor %}
+
+                {% elif result_type == "cves" %}
+                    <p>
+                        {% if search_mode | default('combined') == 'cve' %}
+                        Independent CVE database search.
+                        {% else %}
+                           No internal match was found.
+                        {% endif %}
+                        Found {{ results | length }} CVE record(s)
+                        from the external lookup service.
+                    </p>
+
+                    {% for cve in results %}
+                    <article>
+                        <h3>{{ cve.cve_id }}</h3>
+
+                        <p>
+                            <strong>Description:</strong>
+                            {{ cve.description }}
+                        </p>
+
+                        {% if cve.published %}
+                        <p>
+                            <strong>Published:</strong>
+                            {{ cve.published }}
+                        </p>
+                        {% endif %}
+
+                        {% if cve.last_modified %}
+                        <p>
+                            <strong>Last modified:</strong>
+                            {{ cve.last_modified }}
+                        </p>
+                        {% endif %}
+
+                        
+
+<form action="/approve-cve" method="post">
+    <input
+        type="hidden"
+        name="cve_id"
+        value="{{ cve.cve_id }}"
+    >
+
+    <label for="title-{{ loop.index }}">Internal attack title</label>
+    <input
+        id="title-{{ loop.index }}"
+        name="title"
+        type="text"
+        value="{{ cve.cve_id }} - Automotive cybersecurity attack"
+        maxlength="250"
+        required
+    >
+
+    <label for="description-{{ loop.index }}">Description</label>
+    <textarea
+        id="description-{{ loop.index }}"
+        name="description"
+        rows="3"
+    >{{ cve.description }}</textarea>
+
+    <label for="keywords-{{ loop.index }}">
+        Keywords (separated by commas)
+    </label>
+    <input
+        id="keywords-{{ loop.index }}"
+        name="keywords"
+        type="text"
+        placeholder="automotive, ECU, CAN bus"
+    >
+
+    <label for="applicable-ecu-{{ loop.index }}">
+        Applicable ECU(s) (separated by commas)
+    </label>
+    <input
+        id="applicable-ecu-{{ loop.index }}"
+        name="applicable_ecu"
+        type="text"
+        placeholder="Engine ECU, Central Gateway"
+        required
+    >
+
+    <button type="submit">Approve and Create Internal Attack</button>
+</form>
+
+
+
+                        <p>
+                            <strong>Source:</strong>
+                            National Vulnerability Database (NVD)
+                        </p>
+                    </article>
+                    {% endfor %}
+                {% endif %}
+
+            {% elif not error %}
+                {% if result_type == "cves" %}
+                    <p>
+                        No internal attack matched, and no CVEs
+                        were returned by the external search.
+                    </p>
+                    <p>
+                        {% if search_mode | default('combined') == 'cve' %}
+                            No CVEs were returned by the independent CVE search.
+                        {% else %}
+                            No internal attack matched, and no CVEs
+                            were returned by the external search.
+                        {% endif %}
+                    </p>
+                {% else %}
+                    <p>No matching internal attacks were found.</p>
+                {% endif %}
+            {% endif %}
+        </section>
+        {% endif %}
+
+        <section>
+            <h2>Automotive Cybersecurity</h2>
+            <p>ISO/SAE 21434 and UN Regulation No. 155 (UN R155)</p>
+        </section>
+    </main>
+</body>
+</html>
