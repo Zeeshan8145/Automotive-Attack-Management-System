@@ -94,8 +94,8 @@ Note: This is the happy path, caveats and foreseen issue explained below.
 
 * The system via Kubernetes deployment yaml file is confgured to pull the images from my repository https://hub.docker.com/repositories/zeeshan8145 and for mongo dd it pulls the official mongo 8 image. If for any reason, you would like to chnage the logic or maybe refine the frontend and then deploy the system. You can do so by downloading this repo, updating/refactoring the main.py file for each service (make sure to compile first :)) and building your own updated local image using "docker build -t <NAME>/<Servicename> <SERVICE DIRECTORY>
 * Please keep in mind , each service has its own Dockerfile to aid with the building of the image, if any of your chnages imports a new librayr, make sure to update the requirments.txt with the depedency.
-*Once the docker build of your custom image is succesful, you can reuse the same deployment.yaml file to deploy the system but ensure to update and replace the image: entries from "zeeshan8145/<Servicename>" to "<NAME>/<Servicename>"
-*Once done, save the files and run run "kubectl apply -f Kubernetes/deployment.yaml" and follow the same steps as above
+* Once the docker build of your custom image is succesful, you can reuse the same deployment.yaml file to deploy the system but ensure to update and replace the image: entries from "zeeshan8145/<Servicename>" to "<NAME>/<Servicename>"
+* Once done, save the files and run run "kubectl apply -f Kubernetes/deployment.yaml" and follow the same steps as above
 
 # Troubleshooting
 
@@ -107,8 +107,8 @@ Note: This is the happy path, caveats and foreseen issue explained below.
 
 * Scaling : The application services are deployed independently, so their replica counts can be adjusted. For example  scale the <service> to two replicas by running "kubectl scale deployment/background-threatanalyzer --replicas=3" and you should get three instances of the pod when running "kubectl get pods". Note that the database is deployed as a single StatefulSet replica in this implementation. It is not configured as a replicated database cluster.
 
-*MongoDB is deployed separately from the application services using a StatefulSet and a PersistentVolumeClaim.
+* MongoDB is deployed separately from the application services using a StatefulSet and a PersistentVolumeClaim.
 
-*Limitation: 
+* Limitation: 
 - The NVD API may impose rate limits or experience availability delays.
 - MongoDB runs as a single instance rather than a highly available database cluster
